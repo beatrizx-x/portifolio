@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ana Beatriz — Front-end Developer</title>
+
+  <!-- Fontes modernas e distintas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* =============================================
+       VARIÁVEIS DE DESIGN — EDITE AQUI AS CORES
+       ============================================= */
+    :root {
+      --preto:       #080808;
+      --preto-card:  #111111;
+      --preto-soft:  #1a1a1a;
+      --amarelo:     #FFD600;
+      --amarelo-soft:#ffdf33;
+      --roxo:        #7B2FFF;
+      --roxo-soft:   #a56dff;
+      --cinza:       #888888;
+      --cinza-light: #cccccc;
+      --branco:      #f5f5f5;
+
+      --fonte-titulo: 'Bebas Neue', sans-serif;
+      --fonte-corpo:  'DM Sans', sans-serif;
+      --fonte-mono:   'JetBrains Mono', monospace;
+
+      --raio:        12px;
+      --transition:  0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* =============================================
+       RESET & BASE
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--preto);
+      color: var(--branco);
+      font-family: var(--fonte-corpo);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none; /* cursor customizado */
+    }
+
+    /* =============================================
+       CURSOR CUSTOMIZADO
+       ============================================= */
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--amarelo);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 2px solid var(--amarelo);
+      opacity: 0.5;
+      transition: width 0.3s, height 0.3s, opacity 0.3s;
+    }
+    .cursor-ring.hover {
+      width: 54px; height: 54px;
+      opacity: 0.8;
+    }
+
+    /* =============================================
+       SCROLLBAR CUSTOMIZADA
+       ============================================= */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--preto); }
+    ::-webkit-scrollbar-thumb { background: var(--amarelo); border-radius: 2px; }
+
+    /* =============================================
+       HEADER — GLASSMORPHISM FIXO
+       ============================================= */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 8, 8, 0.6);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 214, 0, 0.08);
+    }
+
+    .logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--amarelo);
+      text-decoration: none;
+    }
+    .logo span { color: var(--branco); }
+
+    nav { display: flex; gap: 2rem; align-items: center; }
+
+    nav a {
+      font-family: var(--fonte-mono);
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--cinza-light);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color var(--transition);
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--amarelo);
+      transition: width var(--transition);
+    }
+    nav a:hover { color: var(--amarelo); }
+    nav a:hover::after { width: 100%; }
+
+    /* Menu hamburger mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--amarelo);
+      transition: var(--transition);
+    }
+
+    /* =============================================
+       HERO SECTION
+       ============================================= */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 6rem 6vw 4rem;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Fundo com grain e gradiente */
+    #home::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(123,47,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 15% 80%, rgba(255,214,0,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Grade decorativa */
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,214,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,214,0,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* ---- Lado Esquerdo ---- */
+    .hero-text { position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--fonte-mono);
+      font-size: 0.75rem;
+      color: var(--amarelo);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--amarelo);
+    }
+
+    .hero-nome {
+      font-family: var(--fonte-titulo);
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: 0.92;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+    .hero-nome .destaque { color: var(--amarelo); }
+
+    .hero-desc {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--cinza-light);
+      max-width: 460px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.6s forwards;
+    }
+    .hero-desc strong { color: var(--roxo-soft); font-weight: 500; }
+
+    /* Ícones de tecnologia */
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .tech-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid rgba(255,214,0,0.2);
+      border-radius: 999px;
+      font-family: var(--fonte-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+      color: var(--cinza-light);
+      background: rgba(255,255,255,0.03);
+      transition: var(--transition);
+    }
+    .tech-badge:hover {
+      border-color: var(--amarelo);
+      color: var(--amarelo);
+      background: rgba(255,214,0,0.06);
+    }
+    .tech-badge i { font-size: 0.85rem; color: var(--amarelo); }
+
+    /* Botões CTA */
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 1s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--amarelo);
+      color: var(--preto);
+      font-family: var(--fonte-corpo);
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.5px;
+      border-radius: var(--raio);
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--amarelo-soft);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,214,0,0.3);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: transparent;
+      color: var(--branco);
+      font-family: var(--fonte-corpo);
+      font-weight: 500;
+      font-size: 0.88rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--raio);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .btn-outline:hover {
+      border-color: var(--roxo);
+      color: var(--roxo-soft);
+      transform: translateY(-2px);
+    }
+
+    /* ---- Lado Direito — Foto ---- */
+    .hero-photo-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1s 0.5s forwards;
+    }
+
+    /* Moldura animada */
+    .photo-frame {
+      position: relative;
+      width: min(380px, 85vw);
+      aspect-ratio: 3/4;
+    }
+
+    /* Bordas animadas */
+    .photo-frame::before,
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      border-radius: 18px;
+      transition: var(--transition);
+    }
+    /* Borda amarela girando */
+    .photo-frame::before {
+      inset: -4px;
+      background: conic-gradient(
+        var(--amarelo) 0deg 90deg,
+        transparent 90deg 270deg,
+        var(--roxo) 270deg 360deg
+      );
+      border-radius: 20px;
+      animation: spinBorder 4s linear infinite;
+      z-index: -1;
+    }
+    /* Fundo preto para cobrir o conic-gradient nos lados */
+    .photo-frame::after {
+      inset: 0;
+      background: var(--preto);
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    .photo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 18px;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter var(--transition);
+    }
+    .photo-img:hover { filter: grayscale(0%) contrast(1.1); }
+
+    /* Sombra amarela glow */
+    .photo-glow {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      box-shadow: 0 0 60px rgba(255,214,0,0.15), 0 0 120px rgba(123,47,255,0.1);
+      pointer-events: none;
+    }
+
+    /* Floating badge */
+    .photo-badge {
+      position: absolute;
+      bottom: -16px;
+      left: -20px;
+      background: var(--preto-card);
+      border: 1px solid rgba(255,214,0,0.2);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-family: var(--fonte-mono);
+      font-size: 0.72rem;
+      color: var(--amarelo);
+      letter-spacing: 1px;
+      backdrop-filter: blur(10px);
+      animation: float 3s ease-in-out infinite;
+    }
+    .photo-badge span { display: block; color: var(--cinza-light); font-size: 0.65rem; margin-top: 2px; }
+
+    /* =============================================
+       SEÇÕES GENÉRICAS
+       ============================================= */
+    section { padding: 6rem 6vw; }
+    section:not(#home) { position: relative; }
+
+    .section-label {
+      font-family: var(--fonte-mono);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amarelo);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--fonte-titulo);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .section-line {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--amarelo), var(--roxo));
+      margin-bottom: 2.5rem;
+      border-radius: 2px;
+    }
+
+    /* =============================================
+       SOBRE — SEÇÃO
+       ============================================= */
+    #sobre {
+      background: var(--preto-soft);
+    }
+
+    .sobre-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .sobre-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .stat-card {
+      background: var(--preto-card);
+      border: 1px solid rgba(255,214,0,0.1);
+      border-radius: var(--raio);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+    .stat-card:hover {
+      border-color: rgba(255,214,0,0.4);
+      transform: translateY(-4px);
+    }
+    .stat-num {
+      font-family: var(--fonte-titulo);
+      font-size: 2.5rem;
+      color: var(--amarelo);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--cinza);
+      margin-top: 4px;
+    }
+
+    .sobre-texto p {
+      color: var(--cinza-light);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    /* Habilidades com barra */
+    .skills-list { margin-top: 2rem; }
+    .skill-item { margin-bottom: 1.2rem; }
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--fonte-mono);
+      font-size: 0.75rem;
+      color: var(--cinza-light);
+      margin-bottom: 6px;
+    }
+    .skill-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--amarelo), var(--roxo));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    .skill-fill.animated { transform: scaleX(1); }
+
+    /* =============================================
+       PROJETOS — GRID
+       ============================================= */
+    #projetos { background: var(--preto); }
+
+    .projetos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Card de projeto */
+    .projeto-card {
+      position: relative;
+      border-radius: var(--raio);
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      background: var(--preto-card);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: var(--transition);
+    }
+    .projeto-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      border-color: rgba(255,214,0,0.2);
+    }
+
+    /* Imagem/placeholder do projeto */
+    .projeto-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .projeto-card:hover .projeto-img { transform: scale(1.08); }
+
+    /* Placeholder colorido quando não há imagem */
+    .projeto-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .projeto-card:hover .projeto-placeholder { transform: scale(1.08); }
+
+    /* Overlay hover */
+    .projeto-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(8,8,8,0.85) 0%,
+        rgba(123,47,255,0.6) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .projeto-card:hover .projeto-overlay { opacity: 1; }
+
+    .projeto-tag {
+      font-family: var(--fonte-mono);
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amarelo);
+      margin-bottom: 0.4rem;
+    }
+    .projeto-nome {
+      font-family: var(--fonte-titulo);
+      font-size: 1.6rem;
+      color: var(--branco);
+      margin-bottom: 0.5rem;
+    }
+    .projeto-desc {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 1rem;
+    }
+    .projeto-links { display: flex; gap: 0.6rem; }
+    .projeto-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-family: var(--fonte-mono);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .projeto-link.github {
+      background: rgba(255,255,255,0.1);
+      color: var(--branco);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .projeto-link.github:hover { background: rgba(255,255,255,0.2); }
+    .projeto-link.demo {
+      background: var(--amarelo);
+      color: var(--preto);
+      font-weight: 700;
+    }
+    .projeto-link.demo:hover { background: var(--amarelo-soft); }
+
+    /* Chip de tech no card */
+    .projeto-chips {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      display: flex;
+      gap: 0.4rem;
+      z-index: 2;
+    }
+    .chip {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-family: var(--fonte-mono);
+      font-size: 0.62rem;
+      background: rgba(8,8,8,0.7);
+      border: 1px solid rgba(255,214,0,0.3);
+      color: var(--amarelo);
+      backdrop-filter: blur(6px);
+    }
+
+    /* =============================================
+       CONTATO / FOOTER
+       ============================================= */
+    #contato {
+      background: var(--preto-soft);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #contato::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,214,0,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contato-inner { position: relative; z-index: 1; }
+
+    .contato-email {
+      font-family: var(--fonte-titulo);
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      color: var(--branco);
+      text-decoration: none;
+      display: inline-block;
+      margin: 1.5rem 0 2.5rem;
+      position: relative;
+      transition: color var(--transition);
+    }
+    .contato-email::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--amarelo), var(--roxo));
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+    .contato-email:hover { color: var(--amarelo); }
+    .contato-email:hover::after { transform: scaleX(1); }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: var(--raio);
+      font-family: var(--fonte-corpo);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .social-btn.linkedin {
+      background: rgba(10, 102, 194, 0.15);
+      color: #70b5f9;
+      border: 1px solid rgba(10, 102, 194, 0.3);
+    }
+    .social-btn.linkedin:hover {
+      background: rgba(10, 102, 194, 0.3);
+      transform: translateY(-3px);
+    }
+    .social-btn.github {
+      background: rgba(255,255,255,0.05);
+      color: var(--branco);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .social-btn.github:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-3px);
+    }
+    .social-btn.whatsapp {
+      background: rgba(37, 211, 102, 0.1);
+      color: #25D366;
+      border: 1px solid rgba(37, 211, 102, 0.25);
+    }
+    .social-btn.whatsapp:hover {
+      background: rgba(37, 211, 102, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .footer-copy {
+      font-family: var(--fonte-mono);
+      font-size: 0.7rem;
+      color: var(--cinza);
+      letter-spacing: 1px;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-copy span { color: var(--amarelo); }
+
+    /* =============================================
+       ANIMAÇÕES
+       ============================================= */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes spinBorder {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* Scroll reveal — elementos começam invisíveis */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Delay para filhos de grids */
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    /* =============================================
+       LINHA DIVISÓRIA DECORATIVA
+       ============================================= */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,214,0,0.2), transparent);
+      margin: 0 6vw;
+    }
+
+    /* =============================================
+       RESPONSIVO — MOBILE FIRST
+       ============================================= */
+    @media (max-width: 900px) {
+      #home {
+        grid-template-columns: 1fr;
+        padding: 7rem 6vw 4rem;
+        gap: 3rem;
+      }
+      .hero-photo-wrap { order: -1; }
+      .photo-frame { width: 260px; }
+      .photo-badge { bottom: -12px; left: 10px; }
+
+      .sobre-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .sobre-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 1rem 1.2rem; }
+      nav { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(8,8,8,0.97); flex-direction: column; justify-content: center;
+            align-items: center; gap: 2.5rem; z-index: 99; }
+      nav.open { display: flex; }
+      nav a { font-size: 1rem; }
+      .hamburger { display: flex; z-index: 101; position: relative; }
+
+      section { padding: 4rem 1.2rem; }
+      #home { padding: 6rem 1.2rem 4rem; }
+
+      .projetos-grid { grid-template-columns: 1fr; }
+      .sobre-stats { grid-template-columns: 1fr 1fr; }
+      .hero-ctas { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor customizado -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ==============================
+       HEADER
+       ============================== -->
+  <header>
+    <a href="#home" class="logo">ANA<span>.</span></a>
+
+    <nav id="nav">
+      <a href="#home">Home</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ==============================
+       HERO — HOME
+       ============================== -->
+  <section id="home">
+    <div class="hero-grid-bg"></div>
+
+    <!-- Texto -->
+    <div class="hero-text">
+      <p class="hero-tag">Disponível para Oportunidades</p>
+
+      <h1 class="hero-nome">
+        Olá,<br>
+        eu sou<br>
+        <span class="destaque">Ana Beatriz</span>
+      </h1>
+
+      <p class="hero-desc">
+        Estudante de <strong>Análise e Desenvolvimento de Sistemas</strong> no Entra21,
+        apaixonada por criar interfaces que unem beleza e funcionalidade.
+      </p>
+
+      <!-- Tech Stack Badges -->
+      <div class="tech-stack">
+        <span class="tech-badge"><i class="fab fa-html5"></i> HTML5</span>
+        <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</span>
+        <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+        <span class="tech-badge"><i class="fas fa-database"></i> SQL</span>
+        <span class="tech-badge"><i class="fas fa-pencil-ruler"></i> UX Design</span>
+        <span class="tech-badge"><i class="fab fa-github"></i> Git</span>
+      </div>
+
+      <div class="hero-ctas">
+        <a href="#projetos" class="btn-primary">
+          <i class="fas fa-folder-open"></i> Ver Projetos
+        </a>
+        <a href="#contato" class="btn-outline">
+          <i class="fas fa-paper-plane"></i> Fale Comigo
+        </a>
+      </div>
+    </div>
+
+    <!-- Foto -->
+    <div class="hero-photo-wrap">
+      <div class="photo-frame">
+        <!-- ⬇️ Substitua pelo caminho da sua foto real se necessário -->
+        <img
+          src="WhatsApp_Image_2026-04-02_at_15_39_40.jpeg"
+          alt="Ana Beatriz — Front-end Developer"
+          class="photo-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Fallback caso a foto não carregue -->
+        <div class="projeto-placeholder" style="display:none; background:linear-gradient(135deg,#1a1a1a,#2a1a4a); font-size:5rem;">
+          👩‍💻
+        </div>
+        <div class="photo-glow"></div>
+
+        <div class="photo-badge">
+          &lt;/dev&gt;
+          <span>Front-end in progress</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==============================
+       SOBRE
+       ============================== -->
+  <section id="sobre">
+    <div class="sobre-inner">
+
+      <!-- Lado esquerdo: texto -->
+      <div class="sobre-texto">
+        <p class="section-label reveal">// sobre mim</p>
+        <h2 class="section-title reveal">
+          Código com <span style="color:var(--amarelo)">propósito</span>
+        </h2>
+        <div class="section-line reveal"></div>
+
+        <p class="reveal">
+          Sou estudante de ADS pelo programa <strong style="color:var(--roxo-soft)">Entra21</strong>,
+          com foco em desenvolvimento front-end. Acredito que cada linha de código é uma oportunidade
+          de criar algo que faça a diferença na vida das pessoas.
+        </p>
+        <p class="reveal">
+          Me dedico a aprender boas práticas de UI/UX para unir estética e usabilidade,
+          construindo interfaces que não são apenas bonitas — são intuitivas e inclusivas.
+        </p>
+        <p class="reveal">
+          Atualmente explorando o universo do JavaScript e mergulhando fundo em
+          acessibilidade, performance e design responsivo.
+        </p>
+
+        <!-- Barras de habilidade -->
+        <div class="skills-list">
+          <!-- Edite os valores de width para % de proficiência -->
+          <div class="skill-item reveal">
+            <div class="skill-header"><span>HTML &amp; CSS</span><span>85%</span></div>
+            <div class="skill-bar"><div class="skill-fill" style="--w:0.85"></div></div>
+          </div>
+          <div class="skill-item reveal reveal-delay-1">
+            <div class="skill-header"><span>JavaScript</span><span>65%</span></div>
+            <div class="skill-bar"><div class="skill-fill" style="--w:0.65"></div></div>
+          </div>
+          <div class="skill-item reveal reveal-delay-2">
+            <div class="skill-header"><span>SQL</span><span>60%</span></div>
+            <div class="skill-bar"><div class="skill-fill" style="--w:0.60"></div></div>
+          </div>
+          <div class="skill-item reveal reveal-delay-3">
+            <div class="skill-header"><span>UX Design</span><span>70%</span></div>
+            <div class="skill-bar"><div class="skill-fill" style="--w:0.70"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lado direito: stats -->
+      <div>
+        <div class="sobre-stats">
+          <!-- Edite os números aqui -->
+          <div class="stat-card reveal">
+            <div class="stat-num">6+</div>
+            <div class="stat-label">Projetos Concluídos</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-1">
+            <div class="stat-num">1+</div>
+            <div class="stat-label">Anos Estudando</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-2">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Tecnologias</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-3">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Vontade de Aprender</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==============================
+       PROJETOS
+       ============================== -->
+  <section id="projetos">
+    <p class="section-label reveal">// projetos</p>
+    <h2 class="section-title reveal">O que eu <span style="color:var(--amarelo)">construí</span></h2>
+    <div class="section-line reveal"></div>
+
+    <div class="projetos-grid">
+
+      <!--
+        ✏️ COMO EDITAR UM CARD DE PROJETO:
+        1. Altere o texto de .projeto-nome (nome do projeto)
+        2. Altere .projeto-desc (descrição)
+        3. Altere os .chip (tecnologias usadas)
+        4. Atualize os href dos links de GitHub e Demo
+        5. Troque o emoji ou adicione uma <img> real no lugar de .projeto-placeholder
+      -->
+
+      <!-- Card 1 -->
+      <div class="projeto-card reveal">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#0f0f23,#1e1e3f);">🛒</div>
+        <div class="projeto-chips">
+          <span class="chip">HTML</span>
+          <span class="chip">CSS</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">E-commerce</p>
+          <h3 class="projeto-nome">StyleShop</h3>
+          <p class="projeto-desc">Loja virtual com layout responsivo e carrinho interativo.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="projeto-card reveal reveal-delay-1">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#1a0a00,#3d1a00);">📋</div>
+        <div class="projeto-chips">
+          <span class="chip">JS</span>
+          <span class="chip">CSS</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">Produtividade</p>
+          <h3 class="projeto-nome">TaskFlow</h3>
+          <p class="projeto-desc">App de tarefas com drag & drop e persistência local.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="projeto-card reveal reveal-delay-2">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#0a001a,#1a0040);">🌦️</div>
+        <div class="projeto-chips">
+          <span class="chip">JS</span>
+          <span class="chip">API</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">API Integration</p>
+          <h3 class="projeto-nome">WeatherNow</h3>
+          <p class="projeto-desc">Dashboard do clima em tempo real com geolocalização.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="projeto-card reveal reveal-delay-3">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#001a0a,#003d1a);">🍕</div>
+        <div class="projeto-chips">
+          <span class="chip">HTML</span>
+          <span class="chip">SQL</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">Landing Page</p>
+          <h3 class="projeto-nome">PizzaHouse</h3>
+          <p class="projeto-desc">Site institucional com cardápio dinâmico e formulário.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="projeto-card reveal reveal-delay-4">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#1a1a00,#3d3d00);">🎮</div>
+        <div class="projeto-chips">
+          <span class="chip">JS</span>
+          <span class="chip">Canvas</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">Game</p>
+          <h3 class="projeto-nome">PixelRun</h3>
+          <p class="projeto-desc">Jogo 2D com canvas, colisões e sistema de pontuação.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="projeto-card reveal reveal-delay-5">
+        <div class="projeto-placeholder" style="background:linear-gradient(135deg,#1a000a,#3d0020);">💜</div>
+        <div class="projeto-chips">
+          <span class="chip">UX</span>
+          <span class="chip">CSS</span>
+        </div>
+        <div class="projeto-overlay">
+          <p class="projeto-tag">Portfólio UI</p>
+          <h3 class="projeto-nome">Este Portfólio</h3>
+          <p class="projeto-desc">Design e código do zero com animações e dark mode.</p>
+          <div class="projeto-links">
+            <a href="https://github.com/beatrizx-x" class="projeto-link github" target="_blank">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#" class="projeto-link demo">
+              <i class="fas fa-external-link-alt"></i> Demo
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ==============================
+       CONTATO / FOOTER
+       ============================== -->
+  <section id="contato">
+    <div class="contato-inner">
+      <p class="section-label reveal">// contato</p>
+      <h2 class="section-title reveal">Vamos <span style="color:var(--amarelo)">conversar?</span></h2>
+      <div class="section-line reveal" style="margin:0 auto 1.5rem;"></div>
+
+      <p class="reveal" style="color:var(--cinza-light); max-width:480px; margin:0 auto 1.5rem;">
+        Estou aberta a oportunidades, freelas e colaborações.
+        Me manda uma mensagem!
+      </p>
+
+      <!-- ✏️ Substitua pelo seu e-mail real -->
+      <a href="mailto:ana.beatriz@email.com" class="contato-email reveal">
+        ana.beatriz@email.com
+      </a>
+
+      <div class="social-links reveal">
+        <a
+          href="https://www.linkedin.com/in/ana-beatriz-da-silva-oliveira-348229257/"
+          class="social-btn linkedin"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+
+        <a
+          href="https://github.com/beatrizx-x"
+          class="social-btn github"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fab fa-github"></i> GitHub
+        </a>
+
+        <!-- ✏️ Substitua o número pelo seu WhatsApp com DDI -->
+        <a
+          href="https://wa.me/5547999999999"
+          class="social-btn whatsapp"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+
+      <p class="footer-copy">
+        Feito com <span>♥</span> e muito CSS por Ana Beatriz &mdash; 2026
+      </p>
+    </div>
+  </section>
+
+  <!-- ==============================
+       JAVASCRIPT
+       ============================== -->
+  <script>
+    // =============================================
+    // CURSOR CUSTOMIZADO
+    // =============================================
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+
+    document.addEventListener('mousemove', e => {
+      dot.style.left  = e.clientX + 'px';
+      dot.style.top   = e.clientY + 'px';
+      ring.style.left = e.clientX + 'px';
+      ring.style.top  = e.clientY + 'px';
+    });
+
+    // Efeito hover no cursor
+    document.querySelectorAll('a, button, .projeto-card, .stat-card, .tech-badge').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    // =============================================
+    // HAMBURGER MENU
+    // =============================================
+    const hamburger = document.getElementById('hamburger');
+    const nav       = document.getElementById('nav');
+
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+
+    // Fechar ao clicar em link
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => nav.classList.remove('open'));
+    });
+
+    // =============================================
+    // SCROLL REVEAL (Intersection Observer)
+    // =============================================
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+
+          // Animar barras de skill quando visíveis
+          const fill = entry.target.querySelector('.skill-fill');
+          if (fill) fill.classList.add('animated');
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // =============================================
+    // ACTIVE LINK NO SCROLL
+    // =============================================
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === `#${current}` ? 'var(--amarelo)' : '';
+      });
+    });
+  </script>
+
+</body>
+</html>
